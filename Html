@@ -1,0 +1,64 @@
+(async function () {
+
+var button;
+var matrix;
+var buzzer;
+
+function buzzer_music(m) {
+  var musicNotes = {};
+  musicNotes.notes = [];
+  musicNotes.tempos = [];
+  if (m[0].notes.length > 1) {
+    for (var i = 0; i < m.length; i++) {
+      if (Array.isArray(m[i].notes)) {
+        var cn = musicNotes.notes.concat(m[i].notes);
+        musicNotes.notes = cn;
+      } else {
+        musicNotes.notes.push(m[i].notes);
+      }
+      if (Array.isArray(m[i].tempos)) {
+        var ct = musicNotes.tempos.concat(m[i].tempos);
+        musicNotes.tempos = ct;
+      } else {
+        musicNotes.tempos.push(m[i].tempos);
+      }
+    }
+  } else {
+    musicNotes.notes = [m[0].notes];
+    musicNotes.tempos = [m[0].tempos];
+  }
+  return musicNotes;
+}
+
+
+button = 0;
+
+boardReady({device: 'YgryM'}, async function (board) {
+  board.systemReset();
+  board.samplingInterval = 250;
+  matrix = getMax7219(board, 7, 8, 9);
+  buzzer = getBuzzer(board, 11);
+  button = getButton(board, 10);
+  matrix.animateStop();
+  matrix.on("0000000000000000");
+  matrix.on("1e3f7ffefe7f3f1e");
+  button.on("pressed", async function(){
+    console.log("pressed");
+      matrix.animateStop();
+    matrix.animate(max7219_horse("left",(max7219_alphabet('MENGLINTSAIILOVEYOU'))),70);
+    for (var count = 0; count < 20; count++) {
+      buzzer.play(buzzer_music([  {notes:"D6",tempos:"5"},{notes:"C6",tempos:"5"},{notes:"0",tempos:"3"},{notes:"G5",tempos:"5"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"0",tempos:"2"},{notes:"G5",tempos:"5"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"0",tempos:"8"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"D6",tempos:"4"},{notes:"0",tempos:"6"},{notes:"C6",tempos:"2"},{notes:"0",tempos:"10"},{notes:"D6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"C6",tempos:"3"},{notes:"0",tempos:"3"},{notes:"A5",tempos:"2"},{notes:"C6",tempos:"3"},{notes:"G6",tempos:"2"},{notes:"C6",tempos:"3"},{notes:"E6",tempos:"4"},{notes:"E6",tempos:"4"},{notes:"0",tempos:"2"},{notes:"G5",tempos:"5"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"0",tempos:"8"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"D6",tempos:"4"},{notes:"0",tempos:"8"},{notes:"C6",tempos:"2"},{notes:"0",tempos:"10"},{notes:"D6",tempos:"3"},{notes:"E6",tempos:"4"},{notes:"0",tempos:"6"},{notes:"A6",tempos:"3"},{notes:"0",tempos:"6"},{notes:"G6",tempos:"3"},{notes:"0",tempos:"10"},{notes:"B5",tempos:"4"},{notes:"C6",tempos:"3"},{notes:"D6",tempos:"2"},{notes:"C6",tempos:"2"}]).notes ,buzzer_music([  {notes:"D6",tempos:"5"},{notes:"C6",tempos:"5"},{notes:"0",tempos:"3"},{notes:"G5",tempos:"5"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"0",tempos:"2"},{notes:"G5",tempos:"5"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"0",tempos:"8"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"D6",tempos:"4"},{notes:"0",tempos:"6"},{notes:"C6",tempos:"2"},{notes:"0",tempos:"10"},{notes:"D6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"C6",tempos:"3"},{notes:"0",tempos:"3"},{notes:"A5",tempos:"2"},{notes:"C6",tempos:"3"},{notes:"G6",tempos:"2"},{notes:"C6",tempos:"3"},{notes:"E6",tempos:"4"},{notes:"E6",tempos:"4"},{notes:"0",tempos:"2"},{notes:"G5",tempos:"5"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"0",tempos:"8"},{notes:"F6",tempos:"5"},{notes:"E6",tempos:"2"},{notes:"D6",tempos:"4"},{notes:"0",tempos:"8"},{notes:"C6",tempos:"2"},{notes:"0",tempos:"10"},{notes:"D6",tempos:"3"},{notes:"E6",tempos:"4"},{notes:"0",tempos:"6"},{notes:"A6",tempos:"3"},{notes:"0",tempos:"6"},{notes:"G6",tempos:"3"},{notes:"0",tempos:"10"},{notes:"B5",tempos:"4"},{notes:"C6",tempos:"3"},{notes:"D6",tempos:"2"},{notes:"C6",tempos:"2"}]).tempos );
+      await delay(20);
+    }
+
+  });
+  button.on("longPress", async function(){
+    console.log("longPress");
+      matrix.animateStop();
+    matrix.off();
+    buzzer.stop();
+
+  });
+});
+
+}());
